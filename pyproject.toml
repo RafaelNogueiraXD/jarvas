@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "jarvas"
+version = "0.1.0"
+description = ""
+authors = ["RafalNogueiraXD <rafa10_nogueira@hotmail.com>"]
+readme = "README.md"
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.111.1"
+pwdlib = {extras = ["argon2"], version = "^0.2.0"}
+sqlalchemy = "^2.0.31"
+pytest = "^8.2.2"
+taskipy = "^1.13.0"
+
+
+pydantic-settings = "^2.3.4"
+alembic = "^1.13.2"
+pyjwt = "^2.8.0"
+[tool.poetry.group.dev.dependencies]
+taskipy = "^1.13.0"
+pytest = "^8.2.2"
+pytest-cov = "^5.0.0"
+
+factory-boy = "^3.3.0"
+freezegun = "^1.5.1"
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.taskipy.tasks]
+run = 'fastapi dev jarvas/main.py'
+test = 'pytest -s -x --cov=jarvas -vv'
+post_test = 'coverage html'
