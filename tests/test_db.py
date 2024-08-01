@@ -20,3 +20,6 @@ def test_create_app(session):
     user = session.scalar(select(App).where(App.name == 'projeto 2'))
 
     assert user.name == 'projeto 2'
+
+
+

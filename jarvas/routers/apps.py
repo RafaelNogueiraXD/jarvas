@@ -6,15 +6,18 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from jarvas.database import get_session
-from jarvas.models.database import App
+from jarvas.models.database import App, User
 from jarvas.schemas import Message, AppSchema, AppList, AppPublic
+from jarvas.security import get_current_user
 
 
 router  = APIRouter(prefix='/apps', tags=['apps'])
 Session = Annotated[Session, Depends(get_session)]
 
+CurrentUser = Annotated[User, Depends(get_current_user)]
+
 @router.post('/', status_code=HTTPStatus.CREATED, response_model=AppPublic)
-def create_app(app: AppSchema, session: Session):
+def create_app(app: AppSchema, session: Session, user: CurrentUser):
     db_app = session.scalar(
         select(App).where(
             (App.name == app.name)
@@ -42,14 +45,13 @@ def read_apps(session: Session, skip: int = 0, limit: int = 100):
     return {'apps': apps}
 
 @router.put('/{name_app}', response_model=AppPublic)
-def update_app(name: str,new_app: AppSchema,session: Session):
+def update_app(name_app: str,new_app: AppSchema,session: Session, user: CurrentUser):
     # sistema de autenticação que vai ser implementado
-    # if current_user.id != user_id:
-    #     raise HTTPException(
-    #         status_code=HTTPStatus.FORBIDDEN, detail='Not enough permissions'
-    #     )
-    app = session.scalar(select(App).where(App.name == name))
+    app = session.scalar(select(App).where(App.name == name_app))
 
+    if not app:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="App not found")
+    
     app.name = new_app.name
     app.password = new_app.description
     app.status = new_app.status
@@ -57,3 +59,19 @@ def update_app(name: str,new_app: AppSchema,session: Session):
     session.refresh(app)
 
     return app
+
+
+@router.delete('/{name_app}', status_code=HTTPStatus.OK, response_model=Message)
+def delete_user(
+    name_app: str,  # altere 'name' para 'name_app'
+    session: Session,
+    user: CurrentUser
+):
+    app = session.scalar(select(App).where(App.name == name_app))
+    if not app:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="App not found")
+
+    session.delete(app)
+    session.commit()
+
+    return {'message': 'app deleted'}

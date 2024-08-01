@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 from freezegun import freeze_time
 
-z
+
 def test_token_expired_after_time(client, user):
     with freeze_time('2023-07-14 12:00:00'):
         response = client.post(

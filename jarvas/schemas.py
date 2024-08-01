@@ -20,6 +20,7 @@ class UserPublic(BaseModel):
 class AppPublic(BaseModel):
     id: int
     name: str
+    description: str
     status: str
     model_config = ConfigDict(from_attributes=True)
 

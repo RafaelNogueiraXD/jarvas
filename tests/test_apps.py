@@ -1,11 +1,13 @@
 from http import HTTPStatus
+from jarvas.models.database import App
 
 # from jarvas.schemas import UserPublic
 
-def test_create_app(client):
+def test_create_app(client,token):
     
     response = client.post(
         '/apps/',
+        headers={'Authorization': f'Bearer {token}'},
         json={
             'name': 'projeto 3',
             'description': 'this is a new project',
@@ -13,29 +15,47 @@ def test_create_app(client):
         },
     )
     assert response.status_code == HTTPStatus.CREATED
-    # assert response.json() == {
-    #     'name': 'projeto 3',
-    #     'description': 'this is a new project',
-    #     'status': 'started',
-    #     'id': 1,
-    # }
-
+    assert response.json() == {
+        'name': 'projeto 3',
+        'description': 'this is a new project',
+        'status': 'started',
+        'id': 1,
+    }
 
 def test_read_apps(client):
     response = client.get('/apps/')
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'apps': []}
 
-def test_update_app(client):
-    nomeApp = 'projeto 3'
+def test_update_app(client, session, token):
+    new_app = App(name="second app",description='uma desc',status='in progress')
+    session.add(new_app)
+    session.commit()
+
+    name_app = 'second app'
     response = client.put(
-        f'/apps/{nomeApp}',
+        f'/apps/{name_app}',
+        headers={'Authorization': f'Bearer {token}'},
         json={
-        "name": "second app",
+        "name": "teste app",
         "description": "kodsako",
         "status": "in progress"
         },
     )
-    app = response.json()
-    # assert response.status_code == HTTPStatus.OK
-    # assert app['name'] == 'second app'
+    app_response= response.json()
+    assert response.status_code == HTTPStatus.OK
+    assert app_response['name'] == 'teste app'
+
+def test_delete_app(client, session, token):
+    new_app = App(name="second app",description='uma desc',status='in progress')
+    session.add(new_app)
+    session.commit()
+
+    name = "second app"
+    response = client.delete(
+        f'/apps/{name}',
+        headers={'Authorization': f'Bearer {token}'}
+                             )
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {'message': 'app deleted'}
