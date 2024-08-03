@@ -43,3 +43,7 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: str | None = None
+
+class AppMessage(BaseModel):
+    name: str
+    phone: str

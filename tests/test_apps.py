@@ -59,3 +59,21 @@ def test_delete_app(client, session, token):
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'message': 'app deleted'}
+
+def test_send_message(client, session,token):
+    new_app = App(name="second app",description='uma desc',status='in progress')
+    session.add(new_app)
+    session.commit()
+
+    phone = "5555996852212"
+
+    response = client.post(
+        f'/apps/send_message/',
+        headers={'Authorization': f'Bearer {token}'},
+        json={
+            "name": new_app.name,
+            "phone": phone
+        }
+    )
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {'message': f"the status is {new_app.status}"}
