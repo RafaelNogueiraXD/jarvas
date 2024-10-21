@@ -25,3 +25,25 @@ poetry shell
  ```
 poetry install
  ```
+
+<p>Para certificar se a aplicação está rodando da forma certa execute: </p>
+
+ ```
+task test
+ ```
+
+<p>Você deve ver algo parecido com: </p>
+<img src="testesAutmatizados.png" />
+<p>Para iniciar a aplicação use: </p>
+
+ ```
+task run
+ ```
+
+<hr>
+<h2>Próximos Passos: </h2>
+<p>Agora que você tem API instalada pode utilizar para lhe auxiliar a testar suas Aplicações a biblioteca do Jarvas!</p>
+<a href="https://github.com/RafaelNogueiraXD/jarvas-Library">Biblioteca Jarvas</a>
+<p>Este é um diagrama c4-model para que você entenda todos os passos do Projeto Jarvas: </p>
+<img src="image.png"/>
+
