@@ -16,6 +16,12 @@ This is a Python application that leverages various libraries, including FastAPI
 pip install poetry
  ```
 
+<p>Dowload the repository:</p>
+
+ ```
+git clone https://github.com/RafaelNogueiraXD/jarvas.git
+ ```
+
 <p>Start the virtual environment with:</p>
 
  ```
