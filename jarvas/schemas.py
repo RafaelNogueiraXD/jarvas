@@ -5,6 +5,8 @@ class Message(BaseModel):
     message: str
 
 
+    
+
 class UserSchema(BaseModel):
     username: str
     email: str
@@ -47,3 +49,8 @@ class TokenData(BaseModel):
 class AppMessage(BaseModel):
     name: str
     phone: str
+
+
+class DiscordMessage(BaseModel):
+    name: str
+    id_channel: int
