@@ -4,10 +4,9 @@ from jarvas.models.database import App
 
 
 def test_send_message(client, session, token):
-    new_app = App(name="second app", description='uma desc', status='in progress')
+    new_app = App(name="second app test", description='uma desc', status='in test')
     session.add(new_app)
     session.commit()
-
     response = client.post(
         '/sendMessage/discord/',  # Corrigido o endpoint
         json={
